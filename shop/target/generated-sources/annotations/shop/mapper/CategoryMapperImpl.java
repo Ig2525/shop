@@ -4,20 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
-import shop.dto.category.CategoryCreateDTO;
 import shop.dto.category.CategoryItemDTO;
+import shop.dto.category.CreateCategoryDTO;
 import shop.entities.CategoryEntity;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-02-25T15:08:45+0200",
+    date = "2023-03-17T18:12:38+0200",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 19.0.2 (Oracle Corporation)"
 )
 @Component
 public class CategoryMapperImpl implements CategoryMapper {
 
     @Override
-    public CategoryEntity CategoryByCreateDTO(CategoryCreateDTO dto) {
+    public CategoryItemDTO CategoryItemDTOByCategory(CategoryEntity category) {
+        if ( category == null ) {
+            return null;
+        }
+
+        CategoryItemDTO categoryItemDTO = new CategoryItemDTO();
+
+        categoryItemDTO.setDescription( category.getDescription() );
+        categoryItemDTO.setId( category.getId() );
+        categoryItemDTO.setName( category.getName() );
+        categoryItemDTO.setImage( category.getImage() );
+
+        return categoryItemDTO;
+    }
+
+    @Override
+    public List<CategoryItemDTO> CategoryItemDTOsByCategories(List<CategoryEntity> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<CategoryItemDTO> list1 = new ArrayList<CategoryItemDTO>( list.size() );
+        for ( CategoryEntity categoryEntity : list ) {
+            list1.add( CategoryItemDTOByCategory( categoryEntity ) );
+        }
+
+        return list1;
+    }
+
+    @Override
+    public CategoryEntity CategoryByCreateCategoryDTO(CreateCategoryDTO dto) {
         if ( dto == null ) {
             return null;
         }
@@ -28,35 +58,5 @@ public class CategoryMapperImpl implements CategoryMapper {
         categoryEntity.setDescription( dto.getDescription() );
 
         return categoryEntity;
-    }
-
-    @Override
-    public CategoryItemDTO CategoryItemByCategory(CategoryEntity entity) {
-        if ( entity == null ) {
-            return null;
-        }
-
-        CategoryItemDTO categoryItemDTO = new CategoryItemDTO();
-
-        categoryItemDTO.setId( entity.getId() );
-        categoryItemDTO.setName( entity.getName() );
-        categoryItemDTO.setImage( entity.getImage() );
-        categoryItemDTO.setDescription( entity.getDescription() );
-
-        return categoryItemDTO;
-    }
-
-    @Override
-    public List<CategoryItemDTO> CategoryItemByCategory(List<CategoryEntity> entities) {
-        if ( entities == null ) {
-            return null;
-        }
-
-        List<CategoryItemDTO> list = new ArrayList<CategoryItemDTO>( entities.size() );
-        for ( CategoryEntity categoryEntity : entities ) {
-            list.add( CategoryItemByCategory( categoryEntity ) );
-        }
-
-        return list;
     }
 }

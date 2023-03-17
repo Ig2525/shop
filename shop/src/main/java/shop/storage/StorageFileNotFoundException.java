@@ -1,6 +1,7 @@
 package shop.storage;
 
 public class StorageFileNotFoundException extends StorageException {
+
     public StorageFileNotFoundException(String message) {
         super(message);
     }
@@ -9,3 +10,4 @@ public class StorageFileNotFoundException extends StorageException {
         super(message, cause);
     }
 }
+

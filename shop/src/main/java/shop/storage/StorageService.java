@@ -1,14 +1,15 @@
 package shop.storage;
-import  org.springframework.core.io.Resource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.sound.midi.Patch;
+import java.nio.file.Path;
 
 public interface StorageService {
     void init();
-    Resource loasAsResource(String fileName);
+    Resource loadAsResource(String filename);
     String save(String base64);
+
+    void  removeFile(String removeFile);
+    Path load(String filename);
     String saveMultipartFile(MultipartFile file);
-    void removeFile(String name);
-    Patch load(String filename);
 }
