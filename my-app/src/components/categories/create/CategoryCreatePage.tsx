@@ -1,10 +1,85 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { ChangeEvent, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ICategoryCreate } from "../types";
 
-const CategoryCratePage = () => {
-    return (
-        <div className="p-8 rounded border border-gray-200">
+// interface IWoman {
+//   name: string,
+//   age: number,
+//   phone: string
+// }
+
+const CategoryCreatePage = () => {
+
+    const navigator = useNavigate();
+
+    const [model, setModel] = useState<ICategoryCreate>({
+        name: "",
+        description: "",
+        file: null
+        //base64: ""
+    });
+    
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>| ChangeEvent<HTMLTextAreaElement>) => {
+        //console.log(e.target.name, e.target.value);
+        setModel({...model, [e.target.name]: e.target.value});
+    }
+
+    const onFileHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        //console.log("Select files: ", e.target.files);
+        const {target} = e;
+        const {files} = target;
+        if(files) {
+            const file = files[0];
+            setModel({...model, file});
+            // const fileReader = new FileReader();
+            // fileReader.readAsDataURL(file);
+            // fileReader.onload=(readFile) => {
+            //     const result = readFile.target?.result as string;
+            //     //console.log("Read File", result);
+            //     setModel({...model, "base64": result});
+            // }
+        }
+        target.value="";
+    }
+
+    const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        // let woman : IWoman = {
+        //   name: "Марина",
+        //   age: 48,
+        //   phone: "+3897 874 55 44"
+        // };
+        // console.log("Woman info ", woman);
+        // woman = {...woman, age: 34};
+        // console.log("Woman new age", woman);
+        // woman = {...woman, age: 18, name: "Ілона"};
+        // console.log("Woman new age and new name", woman);
+        
+
+        try {
+            const item = await axios
+              .post("http://localhost:8084/api/categories", 
+                model, 
+                {
+                  headers: {
+                    "Content-Type": "multipart/form-data"
+                  }
+                });
+            console.log("Server save category", item);
+            navigator("/");
+        }catch(error: any) {
+            console.log("Щось пішло не так", error);
+        }
+        
+    }
+
+  return (
+    <>
+      <div className="p-8 rounded border border-gray-200">
         <h1 className="font-medium text-3xl">Додати категорію</h1>
-        <form>
+
+        <form onSubmit={onSubmitHandler}>
           <div className="mt-8 grid lg:grid-cols-1 gap-4">
             <div>
               <label
@@ -16,6 +91,8 @@ const CategoryCratePage = () => {
               <input
                 type="text"
                 name="name"
+                onChange={onChangeHandler}
+                value={model.name}
                 id="name"
                 className="bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full"
                 placeholder="Вкажіть назву категорії"
@@ -32,6 +109,8 @@ const CategoryCratePage = () => {
               <textarea
                 id="description"
                 name="description"
+                onChange={onChangeHandler}
+                value={model.description}
                 rows={4}
                 className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Вкажіть опис..."
@@ -48,7 +127,7 @@ const CategoryCratePage = () => {
                   htmlFor="selectImage"
                   className="inline-block w-20 overflow-hidden bg-gray-100"
                 >
-                 
+                  {model.file === null ? (
                     <svg
                       className="h-full w-full text-gray-300"
                       fill="currentColor"
@@ -56,7 +135,9 @@ const CategoryCratePage = () => {
                     >
                       <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
-                  
+                  ) : (
+                    <img src={URL.createObjectURL(model.file)} />
+                  )}
                 </label>
                 <label
                   htmlFor="selectImage"
@@ -72,11 +153,10 @@ const CategoryCratePage = () => {
               <input
                 type="file"
                 id="selectImage"
+                onChange={onFileHandler}
                 className="hidden"
               />
             </div>
-
-
           </div>
           <div className="space-x-4 mt-8">
             <button
@@ -85,12 +165,17 @@ const CategoryCratePage = () => {
             >
               Додати
             </button>
-            <Link to="/" className="py-2 px-4 bg-white border border-gray-200 text-gray-600 rounded hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50">
-              Скасувати
+            <Link
+              to="/"
+              className="py-2 px-4 bg-white border border-gray-200 text-gray-600 rounded hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50"
+            >
+              На головну
             </Link>
           </div>
         </form>
       </div>
-    )
-}
-export default CategoryCratePage;
+    </>
+  );
+};
+
+export default CategoryCreatePage;
