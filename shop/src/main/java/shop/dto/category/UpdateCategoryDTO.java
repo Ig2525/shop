@@ -7,6 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UpdateCategoryDTO {
     private String name;
         //private String base64;
-    //private MultipartFile file;
-    //private String description;
+    private MultipartFile file;
+    private String description;
 }

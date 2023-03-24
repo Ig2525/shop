@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import shop.dto.category.CategoryItemDTO;
 import shop.dto.UploadImageDto;
-import shop.dto.product.UploadListImagesDTO;
 import shop.storage.StorageService;
 
 import java.net.URLEncoder;
@@ -21,16 +20,16 @@ import java.util.List;
 @AllArgsConstructor
 public class HomeController {
     private final StorageService storageService;
-    private static List<CategoryItemDTO> list= new ArrayList<>();
+    private static List<CategoryItemDTO> list = new ArrayList<>();
 
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serverfile(@PathVariable String filename) throws Exception {
+    public ResponseEntity<Resource> serverFile(@PathVariable String filename) throws Exception {
         Resource file = storageService.loadAsResource(filename);
         String urlFileName = URLEncoder.encode("Сало.jpg", StandardCharsets.UTF_8.toString());
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "filename=\""+urlFileName+"\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "filename=\"" + urlFileName + "\"")
                 .body(file);
     }
     @GetMapping("/")

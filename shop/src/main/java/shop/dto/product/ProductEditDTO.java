@@ -12,7 +12,7 @@ public class ProductEditDTO {
     private double price;
     private String description;
     private int category_id;
-    //фото, які користувач видали при радагувані
+    //фото, які користувач видалив при радагувані
     private List<String> removeFiles = new ArrayList<>();
     //нові фото, які ми додаємо у товар
     private List<MultipartFile> files = new ArrayList<>();

@@ -8,8 +8,8 @@ public interface StorageService {
     void init();
     Resource loadAsResource(String filename);
     String save(String base64);
-
+    String saveMultipartFile(MultipartFile file);
     void  removeFile(String removeFile);
     Path load(String filename);
-    String saveMultipartFile(MultipartFile file);
+
 }

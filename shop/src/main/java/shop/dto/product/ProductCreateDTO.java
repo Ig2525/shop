@@ -1,5 +1,4 @@
 package shop.dto.product;
-
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 import shop.entities.CategoryEntity;

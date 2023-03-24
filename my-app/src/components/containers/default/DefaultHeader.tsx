@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom'
 
 const navigation = [
   { name: 'Головна', to: '/', current: true },
-  { name: 'Додати товар', to: '/products/create', current: false },
+  { name: 'Товари', to: '/products/list', current: false },
+  
   { name: 'Projects', to: '#', current: false },
   { name: 'Calendar', to: '#', current: false },
 ]
